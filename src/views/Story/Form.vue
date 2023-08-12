@@ -27,6 +27,17 @@
                                 <option :value="2">Published</option>
                             </select>
                         </div>
+                        <div class="mb-6" v-if="users">
+                            <label class="block text-sm font-medium text-gray-700">User Own</label>
+                            <div class="flex flex-wrap gap-2">
+                                <template v-for="user in users">
+                                    <div class="flex items-center items-center gap-2">
+                                        <input type="checkbox" class="rounded" :value="user.id" v-model="story.relations" :id="`user_own_check_${user.id}`"/>
+                                        <label :for="`user_own_check_${user.id}`">{{ user.name }}</label>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
 
                         <div class="flex gap-4 justify-center">
                             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{{ editing ? 'Save' : 'Create' }}</button>
@@ -41,10 +52,15 @@
 
 <script setup>
     import AppLayout from '@/layouts/AppLayout'
-    import { ref, onMounted, reactive } from 'vue';
+    import { ref, onMounted, reactive, watch } from 'vue';
     import TextInput from '@/components/Basic/TextInput';
     import InputError from '@/components/Basic/InputError';
     import { useRouter, useRoute } from 'vue-router';
+    // import Multiselect from 'vue-multiselect';
+    import store from '@/store';
+
+    const user = store.getters.user;
+    const users = store.getters.users;
     import apiClient from '@/api'
     const router = useRouter();
     const route = useRoute();
@@ -53,8 +69,21 @@
         title: '',
         content: '',
         status: 1, // Default status,
-        errors: null
+        errors: null,
+        relations: []
     });
+    const checkValidEdit = () => {
+        if(story && user) {
+            if(user?.role === 1 || (user?.role === 2 && user?.id === story.user_id)) {
+                return true;
+            }
+            if(story?.user_relations?.length) {
+                const vIndex = story.user_relations.findIndex(item => item.user_id === user.id);
+                return vIndex !== -1;
+            }
+        }
+        return false;
+    }
 
     const fetchStory = async (id) => {
         try {
@@ -62,9 +91,16 @@
             if(response.data) {
                 Object.assign(story, response.data);
                 editing.value = true;
+                if(story.user_relations?.length) {
+                    story.relations = story.user_relations.map(item => item.user_id)
+                }
+                if(!checkValidEdit()) {
+                    router.push("/story")
+                }
             }
         } catch (error) {
             console.error("FETCH STORY ERROR::", error);
+            router.push("/story")
         }
     }
     onMounted(() => {
