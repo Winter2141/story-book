@@ -10,7 +10,7 @@
         <Head :title="title" />
         <div class="min-h-screen bg-gray-100">
             <div class="flex flex-nowrap">
-                <div class="w-full h-16 text-left pl-20">
+                <div class="w-full h-16 text-left">
                     <nav>
                         <router-link to="/">Home</router-link> |
                         <router-link to="/story">Story</router-link>
@@ -18,13 +18,9 @@
                 </div>
             </div>
             <div class="flex flex-nowrap">
-                <div class="w-24 bg-slate-100 z-20 border-r border-gray-100">
-                    <div class="flex flex-col">
-                    </div>
-                </div>
                 <div class="page-main-body overflow-auto w-full bg-white">
                     <header v-if="$slots.header" class="">
-                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             <slot name="header" />
                         </div>
                     </header>

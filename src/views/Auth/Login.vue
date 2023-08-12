@@ -5,9 +5,12 @@
     import InputLabel from '@/components/Basic/InputLabel.vue';
     import PrimaryButton from '@/components/Basic/PrimaryButton.vue';
     import TextInput from '@/components/Basic/TextInput.vue';
+    import store from '@/store'
+    import {reactive, watch} from 'vue';
+    import { useRouter } from 'vue-router'
 
-    import { reactive } from 'vue';
-
+    const router = useRouter();
+    const { dispatch } = store;
     defineProps({
         canResetPassword: {
             type: Boolean,
@@ -21,13 +24,19 @@
         email: '',
         password: '',
         remember: false,
+        errors: null
     });
 
     const submit = () => {
-        form.post(route('login'), {
-            onFinish: () => form.reset('password'),
-        });
+        dispatch("login", form)
     };
+    watch(() => store.getters.message, () => {
+        form.errors = { "email": store.getters.message};
+    })
+    watch(() => store.getters.user, () => {
+        console.log(store.getters.user?.role);
+        router.push({ name: "story" });
+    })
 </script>
 
 <template>
@@ -77,18 +86,20 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                        v-if="canResetPassword"
-                        :href="route('password.request')"
+            <div class="flex items-center justify-center flex-col gap-4 mt-2">
+                <router-link
+                        :to="{ name: 'forget-password' }"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Forgot your password?
-                </Link>
+                </router-link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="ml-4 w-full justify-center" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </PrimaryButton>
+                <p class="text-sm">
+                    Don't your have an account? <router-link class="underline" to="/register">register here</router-link>
+                </p>
             </div>
         </form>
     </GuestLayout>
