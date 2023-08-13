@@ -63,8 +63,8 @@
         </template>
 
         <div>
-            <div class="text-right flex justify-between px-10 items-center gap-4">
-                <div class="flex gap-4 items-center">
+            <div class="text-right flex justify-between px-10 items-center gap-4 flex-wrap">
+                <div class="flex gap-4 items-center flex-wrap">
                     <text-input @change="fetchStory" v-model="searchForm.keyword" placeholder="Search by title or content" class="w-64"/>
 
                     <select @change="fetchStory" v-model="searchForm.own_type" class="py-1 border border-black rounded pl-2">
@@ -82,7 +82,7 @@
                 <template v-if="storyData && storyData?.data?.length">
                     <div class="mt-4">
                         <Pagination :pagination="storyData" @page-change="pageChange">
-                            <div class="grid grid-cols-4 w-full gap-6 justify-start items-start">
+                            <div class="grid lg:grid-cols-3 2xl:grid-cols-4 grid-cols-1 sm:grid-cols-2 w-full gap-6 justify-start items-start">
                                 <template v-for="story in storyData?.data">
                                     <div class="bg-white rounded shadow p-4 h-full flex flex-col justify-between border-t-2 border-orange-600">
                                         <div class="">

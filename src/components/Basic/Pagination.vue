@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-4 flex-wrap">
             <div>
                 <label for="per_page" class="mr-2">Items per Page:</label>
                 <select v-model="pageCount" id="per_page" @change="changePerPage" class="border px-2 py-1 rounded">
