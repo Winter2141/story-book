@@ -32,8 +32,9 @@ apiClient.interceptors.response.use(
     },
     (error) => {
         if(error.response) {
-            if(error?.response?.data?.message) {
-                store.commit("SET_MESSAGE", error?.response?.data?.message)
+            if(error?.response?.data?.message || error?.response?.data?.errors) {
+                console.log(JSON.stringify(error?.response?.data?.errors), 'error?.response?.data?.errors')
+                store.commit("SET_MESSAGE", error?.response?.data?.errors ? error?.response?.data?.errors : error?.response?.data?.message)
             } else {
                 switch (error.response) {
                     case 401:

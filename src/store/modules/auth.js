@@ -22,6 +22,9 @@ const actions = {
     async register({ commit }, credentials) {
         try {
             const response = await apiClient.register(credentials);
+            if(response.status == '201') {
+                commit('SET_MESSAGE', 'registered')
+            }
         } catch (error) {
             console.error("REGISTER ERROR::", error)
         }

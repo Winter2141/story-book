@@ -5,7 +5,12 @@
     import PrimaryButton from '@/components/Basic/PrimaryButton.vue';
     import TextInput from '@/components/Basic/TextInput.vue';
     import GuestLayout from '@/layouts/GuestLayout'
-    import { reactive } from 'vue';
+    import store from '@/store'
+    import {reactive, watch} from 'vue';
+    import { useRouter } from 'vue-router'
+
+    const router = useRouter();
+    const { dispatch } = store;
 
     const form = reactive({
         name: '',
@@ -16,7 +21,16 @@
     });
 
     const submit = () => {
+        dispatch("register", form)
     };
+    watch(() => store.getters.message, () => {
+        if(store.getters.message === 'registered') {
+            router.push("/login");
+            alert("Registered");
+        } else {
+            form.errors = store.getters.message;
+        }
+    })
 </script>
 
 <template>

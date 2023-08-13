@@ -10,14 +10,14 @@
                             <label class="block text-sm font-medium text-gray-600">Title</label>
                             <text-input v-model="story.title" type="text" id="title" name="title" class="mt-1 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
 
-                            <input-error :message="story.errors?.title[0]" class="mt-2"/>
+                            <input-error :message="story.errors?.title" class="mt-2"/>
                         </div>
 
                         <div class="mb-4">
                             <label for="content" class="block text-sm font-medium text-gray-600">Content</label>
                             <textarea v-model="story.content" id="content" name="content" rows="4" class="mt-1 h-96 border border-black focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
 
-                            <input-error :message="story.errors?.content[0]" class="mt-2"/>
+                            <input-error :message="story.errors?.content" class="mt-2"/>
                         </div>
 
                         <div class="mb-4">
